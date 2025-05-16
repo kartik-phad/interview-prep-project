@@ -1,0 +1,161 @@
+.container {
+  padding: 0 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.main {
+  min-height: 100vh;
+  padding: 4rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.title {
+  margin: 0 0 2rem 0;
+  line-height: 1.15;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.5rem;
+  color: #666;
+}
+
+.questionContainer {
+  width: 100%;
+  background-color: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.progress {
+  margin-bottom: 1rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.question {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+
+.answerInput {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.buttonPrimary {
+  padding: 0.75rem 1.5rem;
+  background-color: #4285F4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.buttonPrimary:hover {
+  background-color: #3367d6;
+}
+
+.buttonSecondary {
+  padding: 0.75rem 1.5rem;
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.buttonSecondary:hover {
+  background-color: #e5e5e5;
+}
+
+.buttonSecondary:disabled {
+  background-color: #f5f5f5;
+  color: #bbb;
+  cursor: not-allowed;
+}
+
+.completionContainer {
+  width: 100%;
+  background-color: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.completionContainer h2 {
+  color: #4285F4;
+  margin-bottom: 1rem;
+}
+
+.summary {
+  margin: 2rem 0;
+  text-align: left;
+}
+
+.responseItem {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.responseQuestion {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.responseAnswer {
+  white-space: pre-wrap;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+  
+  .question {
+    font-size: 1.25rem;
+  }
+  
+  .buttonContainer {
+    flex-direction: column;
+  }
+  
+  .buttonPrimary, .buttonSecondary {
+    width: 100%;
+  }
+}
