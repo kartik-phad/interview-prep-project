@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Interviews | Interview Prep</title>
+  <meta name="description" content="Prepare for your upcoming interviews"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    .correct {
+      background-color: #d4edda;
+      border-left: 5px solid #28a745;
+      padding: 5px;
+      border-radius: 4px;
+      margin-bottom: 5px;
+    }
+    .wrong {
+      background-color: #f8d7da;
+      border-left: 5px solid #dc3545;
+      padding: 5px;
+      border-radius: 4px;
+      margin-bottom: 5px;
+    }
+    .question-card {
+      border: 1px solid #ddd;
+      background-color: #fff;
+      border-radius: 6px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="header-left">
+          <img src="logo.png" alt="Interview Prep Logo" class="logo" />
+          <div class="header-text">
+            <h1>My Interview Prep</h1>
+            <p>Select an interview type to begin your preparation</p>
+          </div>
+        </div>
+        <div class="user-controls">
+          <span id="user-name">Welcome, User</span>
+          <button id="logout-btn" type="button">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Results Section -->
+    <h1>Your Results</h1>
+    <div id="results-container"></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const resultContainer = document.getElementById('results-container');
+      const userNameSpan = document.getElementById('user-name');
+      const logoutBtn = document.getElementById('logout-btn');
+
+      const userEmail = localStorage.getItem('userEmail');
+      userNameSpan.textContent = userEmail ? `Welcome, ${userEmail}` : 'Welcome, User';
+
+      logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('userEmail');
+        window.location.href = '../index.html';
+      });
+
+      const userAnswers = JSON.parse(localStorage.getItem('quizResult') || '[]');
+
+      userAnswers.forEach((q, index) => {
+        const card = document.createElement('div');
+        card.classList.add('question-card');
+
+        const questionText = document.createElement('h3');
+        questionText.textContent = `${index + 1}. ${q.question}`;
+        card.appendChild(questionText);
+
+        q.options.forEach(opt => {
+          const p = document.createElement('p');
+          p.textContent = opt;
+
+          if (opt === q.correct) {
+            p.classList.add('correct');
+          }
+          if (q.selected === opt && opt !== q.correct) {
+            p.classList.add('wrong');
+          }
+
+          card.appendChild(p);
+        });
+
+        resultContainer.appendChild(card);
+      });
+    });
+  </script>
+</body>
+</html>

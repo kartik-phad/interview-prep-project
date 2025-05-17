@@ -12,10 +12,17 @@
   <div class="container">
     <header class="header">
       <div class="header-content">
-        <img src="logo.png" alt="Interview Prep Logo" class="logo" />
-        <div class="header-text">
-          <h1>My Interview Prep</h1>
-          <p>Select an interview type to begin your preparation</p>
+        <div class="header-left">
+          <img src="logo.png" alt="Interview Prep Logo" class="logo" />
+          <div class="header-text">
+            <h1>My Interview Prep</h1>
+            <p>Select an interview type to begin your preparation</p>
+          </div>
+        </div>
+
+        <div class="user-controls">
+          <span id="user-name">Welcome, User</span>
+          <button id="logout-btn" type="button">Logout</button>
         </div>
       </div>
     </header>
@@ -60,5 +67,45 @@
 
     </main>
   </div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const userNameSpan = document.getElementById('user-name');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    // Get user email from localStorage
+    const userEmail = localStorage.getItem('userEmail');
+
+    if (userEmail) {
+      userNameSpan.textContent = `Welcome, ${userEmail}`;
+    } else {
+      userNameSpan.textContent = 'Welcome, User';
+    }
+
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('userEmail');  // Remove email on logout
+      window.location.href = '../index.html'; // Adjust path if needed
+    });
+  });
+</script>
+
+<!-- choosed quiz -->
+ <script>
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => {
+      const tech = card.getAttribute('data-tech');
+      const level = card.getAttribute('data-level');
+
+      // Store selected tech and level in localStorage
+      localStorage.setItem('selectedTech', tech);
+      localStorage.setItem('selectedLevel', level);
+
+      // Redirect to quiz page
+      window.location.href = 'quiz.html';
+    });
+  });
+</script>
+
+
 </body>
 </html>

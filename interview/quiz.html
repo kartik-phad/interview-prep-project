@@ -3,14 +3,207 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Quiz</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script type="module" src="quiz.js" defer></script>
+  <title>My Interviews | Interview Prep</title>
+  <meta name="description" content="Prepare for your upcoming interviews"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <script defer src="script.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1 id="quiz-title">Loading...</h1>
-    <div id="quiz-container"></div>
+    <header class="header">
+      <div class="header-content">
+        <div class="header-left">
+          <img src="logo.png" alt="Interview Prep Logo" class="logo" />
+          <div class="header-text">
+            <h1>My Interview Prep</h1>
+            <p>Select an interview type to begin your preparation</p>
+          </div>
+        </div>
+
+        <div class="user-controls">
+          <span id="user-name">Welcome, User</span>
+          <button id="logout-btn" type="button">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <h2 id="quiz-title">Quiz</h2>
+      <div id="questions-container"></div>
+    </main>
   </div>
+
+   <div id="questions-container"></div>
+    <button id="submit-btn" class="submit-btn">Submit Test</button>
+  </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Handle user display
+    const userNameSpan = document.getElementById('user-name');
+    const logoutBtn = document.getElementById('logout-btn');
+    const userEmail = localStorage.getItem('userEmail');
+    if (userEmail) {
+      userNameSpan.textContent = `Welcome, ${userEmail}`;
+    }
+
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('userEmail');
+      window.location.href = '../index.html';
+    });
+
+    // Quiz logic
+    const tech = localStorage.getItem('selectedTech') || 'java'; // fallback
+    const container = document.getElementById('questions-container');
+    const title = document.getElementById('quiz-title');
+    title.textContent = `${tech.toUpperCase()} Interview Questions`;
+
+    const questionsData = {
+      java: [
+        {
+          q: 'What is the purpose of the JVM?',
+          options: ['To compile Java code', 'To interpret bytecode', 'To write Java programs', 'To store Java classes'],
+          answer: 'To interpret bytecode'
+        },
+        {
+          q: 'Which keyword is used to inherit a class in Java?',
+          options: ['implements', 'inherits', 'extends', 'super'],
+          answer: 'extends'
+        },
+        {
+          q: 'Which of the following is not a Java feature?',
+          options: ['Object-oriented', 'Platform independent', 'Use of pointers', 'Dynamic'],
+          answer: 'Use of pointers'
+        },
+        {
+          q: 'What is the default value of an int variable?',
+          options: ['0', 'null', 'undefined', '1'],
+          answer: '0'
+        },
+        {
+          q: 'Which exception is thrown when array is accessed beyond its size?',
+          options: ['ArrayStoreException', 'NullPointerException', 'IndexOutOfBoundsException', 'IOException'],
+          answer: 'IndexOutOfBoundsException'
+        },
+        {
+          q: 'Which method is used to start a thread execution?',
+          options: ['init()', 'start()', 'run()', 'resume()'],
+          answer: 'start()'
+        },
+        {
+          q: 'Which package contains the Random class?',
+          options: ['java.util', 'java.io', 'java.lang', 'java.net'],
+          answer: 'java.util'
+        },
+        {
+          q: 'Which interface provides capability to store objects as key-value pairs?',
+          options: ['Map', 'List', 'Set', 'Queue'],
+          answer: 'Map'
+        },
+        {
+          q: 'Which keyword is used to create a constant variable?',
+          options: ['final', 'const', 'static', 'volatile'],
+          answer: 'final'
+        },
+        {
+          q: 'Which is not an access modifier?',
+          options: ['protected', 'default', 'public', 'private'],
+          answer: 'default'
+        },
+        {
+          q: 'What is method overloading?',
+          options: ['Same name, different parameters', 'Same method in child class', 'Method with same return type', 'Using static method'],
+          answer: 'Same name, different parameters'
+        },
+        {
+          q: 'Which class is the root of the Java class hierarchy?',
+          options: ['Object', 'Class', 'Main', 'Base'],
+          answer: 'Object'
+        },
+        {
+          q: 'Which of the following is not a primitive type?',
+          options: ['int', 'float', 'String', 'boolean'],
+          answer: 'String'
+        },
+        {
+          q: 'What is the size of int in Java?',
+          options: ['2 bytes', '4 bytes', '8 bytes', 'Depends on platform'],
+          answer: '4 bytes'
+        },
+        {
+          q: 'Which keyword is used to prevent inheritance?',
+          options: ['abstract', 'final', 'static', 'protected'],
+          answer: 'final'
+        }
+      ],
+
+      python: [
+        { q: 'What is the output of print(2**3)?', options: ['6', '8', '9', '5'], answer: '8' },
+        { q: 'Which keyword is used to define a function?', options: ['function', 'define', 'def', 'func'], answer: 'def' },
+        { q: 'What is a correct syntax to import a module?', options: ['include math', 'import math', 'using math', 'require math'], answer: 'import math' },
+        { q: 'Which data type is immutable?', options: ['List', 'Dict', 'Set', 'Tuple'], answer: 'Tuple' },
+        { q: 'How do you start a comment?', options: ['#', '//', '/*', '--'], answer: '#' },
+        { q: 'Which is used to handle exceptions?', options: ['try-except', 'if-else', 'loop', 'assert'], answer: 'try-except' },
+        { q: 'What is the output of len("hello")?', options: ['5', '4', '6', 'error'], answer: '5' },
+        { q: 'What is the result of 3//2?', options: ['1', '1.5', '2', '0'], answer: '1' },
+        { q: 'Which is the correct way to define a class?', options: ['class MyClass:', 'MyClass class:', 'def MyClass:', 'struct MyClass:'], answer: 'class MyClass:' },
+        { q: 'What is the keyword to inherit a class?', options: ['super', 'base', 'self', 'class Derived(Base):'], answer: 'class Derived(Base):' },
+        { q: 'Which function converts a string to an integer?', options: ['int()', 'str()', 'input()', 'float()'], answer: 'int()' },
+        { q: 'Which method returns keys of a dictionary?', options: ['dict.keys()', 'dict.values()', 'dict.get()', 'dict.items()'], answer: 'dict.keys()' },
+        { q: 'What is a lambda function?', options: ['Anonymous function', 'Loop', 'Class method', 'Import'], answer: 'Anonymous function' },
+        { q: 'Which operator is used for membership testing?', options: ['in', '==', '!=', 'is'], answer: 'in' },
+        { q: 'What is a correct way to open a file?', options: ['open("file.txt", "r")', 'file.open("file.txt")', 'read("file.txt")', 'os.open("file.txt")'], answer: 'open("file.txt", "r")' }
+      ],
+
+      // Add OOPS, SQL, Logic similar to above (I'll provide if needed)
+
+    };
+
+    const questions = questionsData[tech] || [];
+    if (questions.length === 0) {
+      container.innerHTML = '<p>No questions available.</p>';
+      return;
+    }
+
+    container.innerHTML = questions.map((qObj, idx) => `
+      <div class="question-card">
+        <p><strong>Q${idx + 1}:</strong> ${qObj.q}</p>
+        <ul>
+          ${qObj.options.map(option => `
+            <li><label><input type="radio" name="q${idx}" value="${option}"> ${option}</label></li>
+          `).join('')}
+        </ul>
+      </div>
+    `).join('');
+  });
+</script>
+
+<style>
+  .question-card {
+    margin-top: 200px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 15px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  .question-card ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .question-card li {
+    margin-top: 200px;
+    margin: 5px 0;
+  }
+
+  .question-card input[type="radio"] {
+    
+    margin-right: 10px;
+  }
+</style>
+
 </body>
 </html>
