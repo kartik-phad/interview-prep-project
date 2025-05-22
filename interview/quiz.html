@@ -15,11 +15,10 @@
         <div class="header-left">
           <img src="logo.png" alt="Interview Prep Logo" class="logo" />
           <div class="header-text">
-            <h1>My Interview Prep</h1>
-            <p>Select an interview type to begin your preparation</p>
+            <h1>InterviewPrep</h1>
+            <p></p>
           </div>
         </div>
-
         <div class="user-controls">
           <span id="user-name">Welcome, User</span>
           <button id="logout-btn" type="button">Logout</button>
@@ -30,180 +29,235 @@
     <main>
       <h2 id="quiz-title">Quiz</h2>
       <div id="questions-container"></div>
+      <button id="submit-btn" class="submit-btn">Submit Test</button>
     </main>
   </div>
 
-   <div id="questions-container"></div>
-    <button id="submit-btn" class="submit-btn">Submit Test</button>
-  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Handle user display
+      const userNameSpan = document.getElementById('user-name');
+      const logoutBtn = document.getElementById('logout-btn');
+      const submitBtn = document.getElementById('submit-btn');
+      const userEmail = localStorage.getItem('userEmail');
+      if (userEmail) {
+        userNameSpan.textContent = `Welcome, ${userEmail}`;
+      }
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // Handle user display
-    const userNameSpan = document.getElementById('user-name');
-    const logoutBtn = document.getElementById('logout-btn');
-    const userEmail = localStorage.getItem('userEmail');
-    if (userEmail) {
-      userNameSpan.textContent = `Welcome, ${userEmail}`;
-    }
+      logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('userEmail');
+        window.location.href = '../index.html';
+      });
 
-    logoutBtn.addEventListener('click', () => {
-      localStorage.removeItem('userEmail');
-      window.location.href = '../index.html';
+      // Quiz logic
+      let tech = localStorage.getItem('selectedTech') || 'java'; // fallback
+      console.log('Selected tech:', tech); // Debug
+
+      // Normalize tech to handle case variations
+      const techMap = {
+        'javascript': 'JavaScript',
+        'java': 'java',
+        'python': 'python',
+        'oops': 'oops',
+        'sql': 'sql'
+      };
+      tech = techMap[tech.toLowerCase()] || 'java'; // Normalize and fallback
+      console.log('Normalized tech:', tech); // Debug
+
+      const container = document.getElementById('questions-container');
+      const title = document.getElementById('quiz-title');
+      title.textContent = `${tech.toUpperCase()} Interview Questions`;
+
+      const questionsData = {
+        java: [
+          { q: 'What is the purpose of the JVM?', options: ['To compile Java code', 'To interpret bytecode', 'To write Java programs', 'To store Java classes'], answer: 'To interpret bytecode' },
+          { q: 'Which keyword is used to inherit a class in Java?', options: ['implements', 'inherits', 'extends', 'super'], answer: 'extends' },
+          { q: 'Which of the following is not a Java feature?', options: ['Object-oriented', 'Platform independent', 'Use of pointers', 'Dynamic'], answer: 'Use of pointers' },
+          { q: 'What is the default value of an int variable?', options: ['0', 'null', 'undefined', '1'], answer: '0' },
+          { q: 'Which exception is thrown when array is accessed beyond its size?', options: ['ArrayStoreException', 'NullPointerException', 'IndexOutOfBoundsException', 'IOException'], answer: 'IndexOutOfBoundsException' },
+          { q: 'Which method is used to start a thread execution?', options: ['init()', 'start()', 'run()', 'resume()'], answer: 'start()' },
+          { q: 'Which package contains the Random class?', options: ['java.util', 'java.io', 'java.lang', 'java.net'], answer: 'java.util' },
+          { q: 'Which interface provides capability to store objects as key-value pairs?', options: ['Map', 'List', 'Set', 'Queue'], answer: 'Map' },
+          { q: 'Which keyword is used to create a constant variable?', options: ['final', 'const', 'static', 'volatile'], answer: 'final' },
+          { q: 'Which is not an access modifier?', options: ['protected', 'default', 'public', 'private'], answer: 'default' },
+          { q: 'What is method overloading?', options: ['Same name, different parameters', 'Same method in child class', 'Method with same return type', 'Using static method'], answer: 'Same name, different parameters' },
+          { q: 'Which class is the root of the Java class hierarchy?', options: ['Object', 'Class', 'Main', 'Base'], answer: 'Object' },
+          { q: 'Which of the following is not a primitive type?', options: ['int', 'float', 'String', 'boolean'], answer: 'String' },
+          { q: 'What is the size of int in Java?', options: ['2 bytes', '4 bytes', '8 bytes', 'Depends on platform'], answer: '4 bytes' },
+          { q: 'Which keyword is used to prevent inheritance?', options: ['abstract', 'final', 'static', 'protected'], answer: 'final' }
+        ],
+        python: [
+          { q: 'What is the output of print(2**3)?', options: ['6', '8', '9', '5'], answer: '8' },
+          { q: 'Which keyword is used to define a function?', options: ['function', 'define', 'def', 'func'], answer: 'def' },
+          { q: 'What is a correct syntax to import a module?', options: ['include math', 'import math', 'using math', 'require math'], answer: 'import math' },
+          { q: 'Which data type is immutable?', options: ['List', 'Dict', 'Set', 'Tuple'], answer: 'Tuple' },
+          { q: 'How do you start a comment?', options: ['#', '//', '/*', '--'], answer: '#' },
+          { q: 'Which is used to handle exceptions?', options: ['try-except', 'if-else', 'loop', 'assert'], answer: 'try-except' },
+          { q: 'What is the output of len("hello")?', options: ['5', '4', '6', 'error'], answer: '5' },
+          { q: 'What is the result of 3//2?', options: ['1', '1.5', '2', '0'], answer: '1' },
+          { q: 'Which is the correct way to define a class?', options: ['class MyClass:', 'MyClass class:', 'def MyClass:', 'struct MyClass:'], answer: 'class MyClass:' },
+          { q: 'What is the keyword to inherit a class?', options: ['super', 'base', 'self', 'class Derived(Base):'], answer: 'class Derived(Base):' },
+          { q: 'Which function converts a string to an integer?', options: ['int()', 'str()', 'input()', 'float()'], answer: 'int()' },
+          { q: 'Which method returns keys of a dictionary?', options: ['dict.keys()', 'dict.values()', 'dict.get()', 'dict.items()'], answer: 'dict.keys()' },
+          { q: 'What is a lambda function?', options: ['Anonymous function', 'Loop', 'Class method', 'Import'], answer: 'Anonymous function' },
+          { q: 'Which operator is used for membership testing?', options: ['in', '==', '!=', 'is'], answer: 'in' },
+          { q: 'What is a correct way to open a file?', options: ['open("file.txt", "r")', 'file.open("file.txt")', 'read("file.txt")', 'os.open("file.txt")'], answer: 'open("file.txt", "r")' }
+        ],
+        oops: [
+          { q: 'What does OOP stand for?', options: ['Object-Oriented Programming', 'Object-Oriented Process', 'Open Operation Protocol', 'Object Operation Programming'], answer: 'Object-Oriented Programming' },
+          { q: 'Which of the following is not a principle of OOP?', options: ['Encapsulation', 'Polymorphism', 'Abstraction', 'Compilation'], answer: 'Compilation' },
+          { q: 'What is encapsulation?', options: ['Wrapping data and methods together', 'Deriving new classes', 'Overriding methods', 'Hiding implementation details'], answer: 'Wrapping data and methods together' },
+          { q: 'Which feature allows using the same method name with different implementations?', options: ['Polymorphism', 'Inheritance', 'Encapsulation', 'Abstraction'], answer: 'Polymorphism' },
+          { q: 'What is inheritance?', options: ['Acquiring properties of another class', 'Hiding data', 'Overloading operators', 'Creating objects'], answer: 'Acquiring properties of another class' },
+          { q: 'Which of the following is used to achieve abstraction in Java?', options: ['Abstract class', 'Interface', 'Both', 'None'], answer: 'Both' },
+          { q: 'Which access modifier makes members accessible only within the same class?', options: ['private', 'protected', 'public', 'default'], answer: 'private' },
+          { q: 'What is method overriding?', options: ['Redefining a method in a subclass', 'Defining multiple methods with same name', 'Hiding data', 'None of these'], answer: 'Redefining a method in a subclass' },
+          { q: 'Which of the following is not a type of inheritance?', options: ['Single', 'Multiple', 'Multilevel', 'Hybrid'], answer: 'Multiple' },
+          { q: 'What is a constructor?', options: ['A special method to initialize objects', 'A method to destroy objects', 'A static method', 'A method to inherit classes'], answer: 'A special method to initialize objects' },
+          { q: 'Which keyword is used to refer to the current object?', options: ['this', 'super', 'self', 'current'], answer: 'this' },
+          { q: 'Which of the following is an example of polymorphism?', options: ['Method overloading', 'Method overriding', 'Both', 'None'], answer: 'Both' },
+          { q: 'What is data hiding?', options: ['Restricting access to class members', 'Showing all data', 'Using public variables', 'None of these'], answer: 'Restricting access to class members' },
+          { q: 'Which OOP concept is achieved by using private variables?', options: ['Encapsulation', 'Inheritance', 'Polymorphism', 'Abstraction'], answer: 'Encapsulation' },
+          { q: 'Which of the following best describes abstraction?', options: ['Hiding complexity and showing only essentials', 'Showing all details', 'Deriving new classes', 'None of these'], answer: 'Hiding complexity and showing only essentials' }
+        ],
+        sql: [
+          { q: 'What does SQL stand for?', options: ['Structured Query Language', 'Simple Query Language', 'Sequential Query Language', 'Standard Query Language'], answer: 'Structured Query Language' },
+          { q: 'Which SQL statement is used to extract data from a database?', options: ['GET', 'SELECT', 'EXTRACT', 'OPEN'], answer: 'SELECT' },
+          { q: 'Which clause is used to filter records?', options: ['WHERE', 'ORDER BY', 'GROUP BY', 'HAVING'], answer: 'WHERE' },
+          { q: 'Which SQL statement is used to update data in a database?', options: ['MODIFY', 'UPDATE', 'CHANGE', 'ALTER'], answer: 'UPDATE' },
+          { q: 'Which function returns the number of rows?', options: ['COUNT()', 'SUM()', 'TOTAL()', 'NUMBER()'], answer: 'COUNT()' },
+          { q: 'Which keyword is used to sort the result-set?', options: ['ORDER BY', 'SORT', 'GROUP BY', 'ARRANGE'], answer: 'ORDER BY' },
+          { q: 'Which SQL statement is used to delete data?', options: ['REMOVE', 'DELETE', 'DROP', 'ERASE'], answer: 'DELETE' },
+          { q: 'Which operator is used to search for a pattern?', options: ['LIKE', 'IN', 'BETWEEN', 'EXISTS'], answer: 'LIKE' },
+          { q: 'Which command is used to remove a table from a database?', options: ['DROP TABLE', 'DELETE TABLE', 'REMOVE TABLE', 'ERASE TABLE'], answer: 'DROP TABLE' },
+          { q: 'Which clause is used to group rows with the same values?', options: ['GROUP BY', 'ORDER BY', 'WHERE', 'HAVING'], answer: 'GROUP BY' },
+          { q: 'Which SQL statement is used to insert new data?', options: ['INSERT INTO', 'ADD', 'CREATE', 'APPEND'], answer: 'INSERT INTO' },
+          { q: 'Which function returns the largest value?', options: ['MAX()', 'LARGE()', 'TOP()', 'BIGGEST()'], answer: 'MAX()' },
+          { q: 'Which SQL keyword is used to prevent duplicate records?', options: ['DISTINCT', 'UNIQUE', 'DIFFERENT', 'ONLY'], answer: 'DISTINCT' },
+          { q: 'Which clause is used to filter groups?', options: ['HAVING', 'WHERE', 'ORDER BY', 'GROUP BY'], answer: 'HAVING' },
+          { q: 'Which join returns all records when there is a match in either left or right table?', options: ['FULL OUTER JOIN', 'INNER JOIN', 'LEFT JOIN', 'RIGHT JOIN'], answer: 'FULL OUTER JOIN' }
+        ],
+        JavaScript: [
+          { q: 'Which company developed JavaScript?', options: ['Netscape', 'Microsoft', 'Google', 'Apple'], answer: 'Netscape' },
+          { q: 'Which symbol is used for single-line comments in JavaScript?', options: ['//', '#', '<!--', '--'], answer: '//' },
+          { q: 'How do you declare a variable in JavaScript?', options: ['var', 'let', 'const', 'All of these'], answer: 'All of these' },
+          { q: 'What is the output of "typeof null"?', options: ['object', 'null', 'undefined', 'number'], answer: 'object' },
+          { q: 'Which method is used to parse a string to an integer?', options: ['parseInt()', 'parseFloat()', 'Number()', 'toString()'], answer: 'parseInt()' },
+          { q: 'Which keyword is used to define a function?', options: ['function', 'def', 'fun', 'define'], answer: 'function' },
+          { q: 'What is the correct syntax to write an array?', options: ['let arr = [1,2,3];', 'let arr = (1,2,3);', 'let arr = {1,2,3};', 'let arr = <1,2,3>;'], answer: 'let arr = [1,2,3];' },
+          { q: 'Which operator is used to assign a value to a variable?', options: ['=', '==', '===', ':='], answer: '=' },
+          { q: 'How do you write "Hello" to the console?', options: ['console.log("Hello")', 'print("Hello")', 'echo("Hello")', 'printf("Hello")'], answer: 'console.log("Hello")' },
+          { q: 'Which of the following is not a JavaScript data type?', options: ['Number', 'String', 'Character', 'Boolean'], answer: 'Character' },
+          { q: 'What does DOM stand for?', options: ['Document Object Model', 'Data Object Model', 'Document Oriented Model', 'Desktop Object Model'], answer: 'Document Object Model' },
+          { q: 'Which method adds a new element to the end of an array?', options: ['push()', 'pop()', 'shift()', 'unshift()'], answer: 'push()' },
+          { q: 'How do you write an if statement in JavaScript?', options: ['if (condition) { }', 'if condition then', 'if condition: {}', 'if (condition):'], answer: 'if (condition) { }' },
+          { q: 'Which event occurs when a user clicks on an HTML element?', options: ['onclick', 'onchange', 'onmouseover', 'onmouseclick'], answer: 'onclick' },
+          { q: 'What is the result of 2 + "2" in JavaScript?', options: ['"22"', '4', 'NaN', 'undefined'], answer: '"22"' }
+        ]
+      };
+
+      const questions = questionsData[tech] || [];
+      console.log('Number of questions:', questions.length); // Debug
+      if (questions.length === 0) {
+        container.innerHTML = '<p>No questions available for ' + tech + '.</p>';
+        return;
+      }
+
+      // Sanitize and render questions
+      try {
+        container.innerHTML = questions.map((qObj, idx) => {
+          // Sanitize question and options to prevent HTML injection
+          const escapeHTML = (str) => str.replace(/[&<>"']/g, (m) => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+          })[m]);
+          
+          console.log(`Rendering question ${idx + 1}: ${qObj.q}`); // Debug
+          return `
+            <div class="question-card">
+              <p><strong>Q${idx + 1}:</strong> ${escapeHTML(qObj.q)}</p>
+              <ul>
+                ${qObj.options.map(option => `
+                  <li><label><input type="radio" name="q${idx}" value="${escapeHTML(option)}"> ${escapeHTML(option)}</label></li>
+                `).join('')}
+              </ul>
+            </div>
+          `;
+        }).join('');
+      } catch (error) {
+        console.error('Error rendering questions:', error);
+        container.innerHTML = '<p>Error loading questions. Please try again.</p>';
+      }
+
+      // Submit button logic
+      submitBtn.addEventListener('click', () => {
+        let score = 0;
+        const quizResult = [];
+
+        questions.forEach((qObj, idx) => {
+          const selectedOption = document.querySelector(`input[name="q${idx}"]:checked`);
+          const userAnswer = selectedOption ? selectedOption.value : null;
+          if (userAnswer && userAnswer === qObj.answer) {
+            score++;
+          }
+          quizResult.push({
+            question: qObj.q,
+            options: qObj.options,
+            correct: qObj.answer,
+            selected: userAnswer
+          });
+        });
+
+        console.log('Score:', score, 'Total:', questions.length); // Debug
+        // Store score, total questions, tech, and quiz results in localStorage
+        localStorage.setItem('quizScore', score);
+        localStorage.setItem('totalQuestions', questions.length);
+        localStorage.setItem('quizTech', tech);
+        localStorage.setItem('quizResult', JSON.stringify(quizResult));
+
+        // Redirect to result.html
+        window.location.href = 'result.html';
+      });
     });
+  </script>
 
-    // Quiz logic
-    const tech = localStorage.getItem('selectedTech') || 'java'; // fallback
-    const container = document.getElementById('questions-container');
-    const title = document.getElementById('quiz-title');
-    title.textContent = `${tech.toUpperCase()} Interview Questions`;
-
-    const questionsData = {
-      java: [
-        {
-          q: 'What is the purpose of the JVM?',
-          options: ['To compile Java code', 'To interpret bytecode', 'To write Java programs', 'To store Java classes'],
-          answer: 'To interpret bytecode'
-        },
-        {
-          q: 'Which keyword is used to inherit a class in Java?',
-          options: ['implements', 'inherits', 'extends', 'super'],
-          answer: 'extends'
-        },
-        {
-          q: 'Which of the following is not a Java feature?',
-          options: ['Object-oriented', 'Platform independent', 'Use of pointers', 'Dynamic'],
-          answer: 'Use of pointers'
-        },
-        {
-          q: 'What is the default value of an int variable?',
-          options: ['0', 'null', 'undefined', '1'],
-          answer: '0'
-        },
-        {
-          q: 'Which exception is thrown when array is accessed beyond its size?',
-          options: ['ArrayStoreException', 'NullPointerException', 'IndexOutOfBoundsException', 'IOException'],
-          answer: 'IndexOutOfBoundsException'
-        },
-        {
-          q: 'Which method is used to start a thread execution?',
-          options: ['init()', 'start()', 'run()', 'resume()'],
-          answer: 'start()'
-        },
-        {
-          q: 'Which package contains the Random class?',
-          options: ['java.util', 'java.io', 'java.lang', 'java.net'],
-          answer: 'java.util'
-        },
-        {
-          q: 'Which interface provides capability to store objects as key-value pairs?',
-          options: ['Map', 'List', 'Set', 'Queue'],
-          answer: 'Map'
-        },
-        {
-          q: 'Which keyword is used to create a constant variable?',
-          options: ['final', 'const', 'static', 'volatile'],
-          answer: 'final'
-        },
-        {
-          q: 'Which is not an access modifier?',
-          options: ['protected', 'default', 'public', 'private'],
-          answer: 'default'
-        },
-        {
-          q: 'What is method overloading?',
-          options: ['Same name, different parameters', 'Same method in child class', 'Method with same return type', 'Using static method'],
-          answer: 'Same name, different parameters'
-        },
-        {
-          q: 'Which class is the root of the Java class hierarchy?',
-          options: ['Object', 'Class', 'Main', 'Base'],
-          answer: 'Object'
-        },
-        {
-          q: 'Which of the following is not a primitive type?',
-          options: ['int', 'float', 'String', 'boolean'],
-          answer: 'String'
-        },
-        {
-          q: 'What is the size of int in Java?',
-          options: ['2 bytes', '4 bytes', '8 bytes', 'Depends on platform'],
-          answer: '4 bytes'
-        },
-        {
-          q: 'Which keyword is used to prevent inheritance?',
-          options: ['abstract', 'final', 'static', 'protected'],
-          answer: 'final'
-        }
-      ],
-
-      python: [
-        { q: 'What is the output of print(2**3)?', options: ['6', '8', '9', '5'], answer: '8' },
-        { q: 'Which keyword is used to define a function?', options: ['function', 'define', 'def', 'func'], answer: 'def' },
-        { q: 'What is a correct syntax to import a module?', options: ['include math', 'import math', 'using math', 'require math'], answer: 'import math' },
-        { q: 'Which data type is immutable?', options: ['List', 'Dict', 'Set', 'Tuple'], answer: 'Tuple' },
-        { q: 'How do you start a comment?', options: ['#', '//', '/*', '--'], answer: '#' },
-        { q: 'Which is used to handle exceptions?', options: ['try-except', 'if-else', 'loop', 'assert'], answer: 'try-except' },
-        { q: 'What is the output of len("hello")?', options: ['5', '4', '6', 'error'], answer: '5' },
-        { q: 'What is the result of 3//2?', options: ['1', '1.5', '2', '0'], answer: '1' },
-        { q: 'Which is the correct way to define a class?', options: ['class MyClass:', 'MyClass class:', 'def MyClass:', 'struct MyClass:'], answer: 'class MyClass:' },
-        { q: 'What is the keyword to inherit a class?', options: ['super', 'base', 'self', 'class Derived(Base):'], answer: 'class Derived(Base):' },
-        { q: 'Which function converts a string to an integer?', options: ['int()', 'str()', 'input()', 'float()'], answer: 'int()' },
-        { q: 'Which method returns keys of a dictionary?', options: ['dict.keys()', 'dict.values()', 'dict.get()', 'dict.items()'], answer: 'dict.keys()' },
-        { q: 'What is a lambda function?', options: ['Anonymous function', 'Loop', 'Class method', 'Import'], answer: 'Anonymous function' },
-        { q: 'Which operator is used for membership testing?', options: ['in', '==', '!=', 'is'], answer: 'in' },
-        { q: 'What is a correct way to open a file?', options: ['open("file.txt", "r")', 'file.open("file.txt")', 'read("file.txt")', 'os.open("file.txt")'], answer: 'open("file.txt", "r")' }
-      ],
-
-      // Add OOPS, SQL, Logic similar to above (I'll provide if needed)
-
-    };
-
-    const questions = questionsData[tech] || [];
-    if (questions.length === 0) {
-      container.innerHTML = '<p>No questions available.</p>';
-      return;
+  <style>
+    .question-card {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 15px 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
-    container.innerHTML = questions.map((qObj, idx) => `
-      <div class="question-card">
-        <p><strong>Q${idx + 1}:</strong> ${qObj.q}</p>
-        <ul>
-          ${qObj.options.map(option => `
-            <li><label><input type="radio" name="q${idx}" value="${option}"> ${option}</label></li>
-          `).join('')}
-        </ul>
-      </div>
-    `).join('');
-  });
-</script>
+    .question-card ul {
+      list-style-type: none;
+      padding: 0;
+    }
 
-<style>
-  .question-card {
-    margin-top: 200px;
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 12px;
-    padding: 20px;
-    margin: 15px 0;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
+    .question-card li {
+      margin: 10px 0;
+    }
 
-  .question-card ul {
-    list-style-type: none;
-    padding: 0;
-  }
+    .question-card input[type="radio"] {
+      margin-right: 10px;
+    }
 
-  .question-card li {
-    margin-top: 200px;
-    margin: 5px 0;
-  }
+    .submit-btn {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
 
-  .question-card input[type="radio"] {
-    
-    margin-right: 10px;
-  }
-</style>
-
+    .submit-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </body>
 </html>

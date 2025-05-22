@@ -5,17 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>My Interviews | Interview Prep</title>
   <meta name="description" content="Prepare for your upcoming interviews"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css"/>
   <script defer src="script.js"></script>
 </head>
-<body>
+<body class="interview-home">
   <div class="container">
     <header class="header">
       <div class="header-content">
         <div class="header-left">
           <img src="logo.png" alt="Interview Prep Logo" class="logo" />
-          <div class="header-text">
-            <h1>My Interview Prep</h1>
+          <div class="header-text1">
+            <h1>MyInterviewPrep</h1>
             <p>Select an interview type to begin your preparation</p>
           </div>
         </div>
@@ -28,7 +29,6 @@
     </header>
 
     <main class="main">
-
       <!-- Easy Level -->
       <section class="level-section">
         <h2 class="level-heading">Easy Level</h2>
@@ -37,7 +37,7 @@
           <div class="card" data-tech="python" data-level="easy">Python</div>
           <div class="card" data-tech="oops" data-level="easy">OOPS</div>
           <div class="card" data-tech="sql" data-level="easy">SQL</div>
-          <div class="card" data-tech="logic" data-level="easy">Logical Reasoning</div>
+          <div class="card" data-tech="JavaScript" data-level="easy">JavaScript</div>
         </div>
       </section>
 
@@ -49,7 +49,7 @@
           <div class="card" data-tech="python" data-level="medium">Python</div>
           <div class="card" data-tech="oops" data-level="medium">OOPS</div>
           <div class="card" data-tech="sql" data-level="medium">SQL</div>
-          <div class="card" data-tech="logic" data-level="medium">Logical Reasoning</div>
+          <div class="card" data-tech="JavaScript" data-level="medium">JavaScript</div>
         </div>
       </section>
 
@@ -61,51 +61,46 @@
           <div class="card" data-tech="python" data-level="hard">Python</div>
           <div class="card" data-tech="oops" data-level="hard">OOPS</div>
           <div class="card" data-tech="sql" data-level="hard">SQL</div>
-          <div class="card" data-tech="logic" data-level="hard">Logical Reasoning</div>
+          <div class="card" data-tech="JavaScript" data-level="hard">JavaScript</div>
         </div>
       </section>
-
     </main>
   </div>
 
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const userNameSpan = document.getElementById('user-name');
-    const logoutBtn = document.getElementById('logout-btn');
+<!-- interviewHome.js -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const userNameSpan = document.getElementById('user-name');
+      const logoutBtn = document.getElementById('logout-btn');
 
-    // Get user email from localStorage
-    const userEmail = localStorage.getItem('userEmail');
+      // Get user email from localStorage
+      const userEmail = localStorage.getItem('userEmail');
 
-    if (userEmail) {
-      userNameSpan.textContent = `Welcome, ${userEmail}`;
-    } else {
-      userNameSpan.textContent = 'Welcome, User';
-    }
+      if (userEmail) {
+        userNameSpan.textContent = `Welcome, ${userEmail}`;
+      } else {
+        userNameSpan.textContent = 'Welcome, User';
+      }
 
-    logoutBtn.addEventListener('click', () => {
-      localStorage.removeItem('userEmail');  // Remove email on logout
-      window.location.href = '../index.html'; // Adjust path if needed
+      logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('userEmail');
+        window.location.href = '../index.html';
+      });
     });
-  });
-</script>
 
-<!-- choosed quiz -->
- <script>
-  document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('click', () => {
-      const tech = card.getAttribute('data-tech');
-      const level = card.getAttribute('data-level');
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', () => {
+        const tech = card.getAttribute('data-tech');
+        const level = card.getAttribute('data-level');
 
-      // Store selected tech and level in localStorage
-      localStorage.setItem('selectedTech', tech);
-      localStorage.setItem('selectedLevel', level);
+        localStorage.setItem('selectedTech', tech);
+        localStorage.setItem('selectedLevel', level);
 
-      // Redirect to quiz page
-      window.location.href = 'quiz.html';
+        window.location.href = 'quiz.html';
+      });
     });
-  });
-</script>
-
-
+  </script>
 </body>
 </html>
+          
+ 

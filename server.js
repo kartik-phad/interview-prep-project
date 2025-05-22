@@ -10,12 +10,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve static files (adjust path as needed)
+// Serve static files 
 app.use(express.static(path.join(__dirname)));
 
 // MongoDB connection
 mongoose.connect('mongodb://localhost:27017/userDB', {
-    // Note: These options are deprecated and can be removed in Mongoose 6+
+ 
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log("MongoDB connected"))

@@ -5,34 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>My Interviews | Interview Prep</title>
   <meta name="description" content="Prepare for your upcoming interviews"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css"/>
-  <style>
-    .correct {
-      background-color: #d4edda;
-      border-left: 5px solid #28a745;
-      padding: 5px;
-      border-radius: 4px;
-      margin-bottom: 5px;
-    }
-    .wrong {
-      background-color: #f8d7da;
-      border-left: 5px solid #dc3545;
-      padding: 5px;
-      border-radius: 4px;
-      margin-bottom: 5px;
-    }
-    .question-card {
-      border: 1px solid #ddd;
-      background-color: #fff;
-      border-radius: 6px;
-      padding: 15px;
-      margin-bottom: 20px;
-    }
-    h1 {
-      margin-top: 20px;
-      text-align: center;
-    }
-  </style>
+  <link rel="stylesheet" href="style1.css">
+  <script defer src="script.js"></script>
 </head>
 <body>
   <div class="container">
@@ -42,8 +18,8 @@
         <div class="header-left">
           <img src="logo.png" alt="Interview Prep Logo" class="logo" />
           <div class="header-text">
-            <h1>My Interview Prep</h1>
-            <p>Select an interview type to begin your preparation</p>
+            <h1>InterViewPrep</h1>
+       
           </div>
         </div>
         <div class="user-controls">
@@ -54,8 +30,13 @@
     </header>
 
     <!-- Results Section -->
-    <h1>Your Results</h1>
+    <h1 class="results-title">Your Results</h1>
+    <div class="score-card">
+      <h2 id="score-text"></h2>
+      <p id="percentage-text"></p>
+    </div>
     <div id="results-container"></div>
+    <button class="retake-btn" onclick="window.location.href='quiz.html'">Retake Quiz</button>
   </div>
 
   <script>
@@ -63,7 +44,10 @@
       const resultContainer = document.getElementById('results-container');
       const userNameSpan = document.getElementById('user-name');
       const logoutBtn = document.getElementById('logout-btn');
+      const scoreText = document.getElementById('score-text');
+      const percentageText = document.getElementById('percentage-text');
 
+      // Handle user display
       const userEmail = localStorage.getItem('userEmail');
       userNameSpan.textContent = userEmail ? `Welcome, ${userEmail}` : 'Welcome, User';
 
@@ -72,7 +56,22 @@
         window.location.href = '../index.html';
       });
 
+      // Display score
+      const score = parseInt(localStorage.getItem('quizScore') || '0');
+      const totalQuestions = parseInt(localStorage.getItem('totalQuestions') || '0');
+      const tech = localStorage.getItem('quizTech') || 'Unknown';
+      const percentage = totalQuestions > 0 ? (score / totalQuestions * 100).toFixed(2) : 0;
+
+      scoreText.textContent = `You scored ${score}/${totalQuestions} in ${tech.toUpperCase()} Quiz`;
+      percentageText.textContent = `Percentage: ${percentage}%`;
+
+      // Display questions and answers
       const userAnswers = JSON.parse(localStorage.getItem('quizResult') || '[]');
+
+      if (userAnswers.length === 0) {
+        resultContainer.innerHTML = '<p>No results available.</p>';
+        return;
+      }
 
       userAnswers.forEach((q, index) => {
         const card = document.createElement('div');
@@ -85,11 +84,12 @@
         q.options.forEach(opt => {
           const p = document.createElement('p');
           p.textContent = opt;
+          p.classList.add('option');
 
           if (opt === q.correct) {
             p.classList.add('correct');
           }
-          if (q.selected === opt && opt !== q.correct) {
+          if (q.selected === opt && opt !== q.correct && q.selected !== null) {
             p.classList.add('wrong');
           }
 
@@ -98,6 +98,12 @@
 
         resultContainer.appendChild(card);
       });
+
+      // Clear quiz results from localStorage to prevent stale data
+      localStorage.removeItem('quizScore');
+      localStorage.removeItem('totalQuestions');
+      localStorage.removeItem('quizTech');
+      localStorage.removeItem('quizResult');
     });
   </script>
 </body>

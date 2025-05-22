@@ -1,0 +1,122 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#logout-btn {
+  padding: 8px 16px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#logout-btn:hover {
+  background-color: #c82333;
+}
+
+.score-card {
+  background: linear-gradient(135deg, #007bff, #00d4ff);
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.score-card h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.score-card p {
+  margin: 10px 0 0;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.question-card {
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.question-card h3 {
+  margin: 0 0 15px;
+  font-size: 20px;
+  color: #333;
+  font-weight: 600;
+}
+
+.correct {
+  background-color: #d4edda;
+  border-left: 5px solid #28a745;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 5px 0;
+}
+
+.wrong {
+  background-color: #f8d7da;
+  border-left: 5px solid #dc3545;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 5px 0;
+}
+
+.option {
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+h1.results-title {
+  text-align: center;
+  color: #007bff;
+  font-size: 32px;
+  margin: 20px 0;
+  font-weight: 700;
+}
+
+.retake-btn {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.retake-btn:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 10px;
+  }
+  .score-card h2 {
+    font-size: 24px;
+  }
+  .score-card p {
+    font-size: 16px;
+  }
+  .question-card h3 {
+    font-size: 18px;
+  }
+}
